@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SignalRChat.Hubs;
+using SignalRTableBooking.Hubs;
 
 namespace SignalRWebApplication
 {
@@ -57,7 +57,7 @@ namespace SignalRWebApplication
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<TableBookingHub>("/tableBookingHub");
             });
         }
     }

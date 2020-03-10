@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
-namespace SignalRChat.Hubs
+namespace SignalRTableBooking.Hubs
 {
-    public class ChatHub : Hub
+    public class TableBookingHub : Hub
     {
         public async Task SendMessage(string message)
         {
