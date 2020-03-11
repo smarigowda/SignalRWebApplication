@@ -19,6 +19,7 @@
     },
     "SignalRWebApplication": {
       "commandName": "Project",
+      "launchBrowser": false,
       "launchUrl": "weatherforecast",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
