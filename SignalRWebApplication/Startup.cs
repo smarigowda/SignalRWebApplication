@@ -35,11 +35,12 @@ namespace SignalRWebApplication
                 });
             });
             services.AddControllers();
+            services.AddSingleton<IRabbitMQService, RabbitMQService>(); // Need a single instance so we can keep the referenced connect with RabbitMQ open
             services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -59,6 +60,16 @@ namespace SignalRWebApplication
                 endpoints.MapControllers();
                 endpoints.MapHub<TableBookingHub>("/tableBookingHub");
             });
+
+            // Run 'RegisterSignalRWithRabbitMQ' when the application has started.
+            lifetime.ApplicationStarted.Register(() => RegisterSignalRWithRabbitMQ(app.ApplicationServices));
+        }
+
+        public void RegisterSignalRWithRabbitMQ(IServiceProvider serviceProvider)
+        {
+            // Connect to RabbitMQ
+            var rabbitMQService = (IRabbitMQService)serviceProvider.GetService(typeof(IRabbitMQService));
+            rabbitMQService.Connect();
         }
     }
 }

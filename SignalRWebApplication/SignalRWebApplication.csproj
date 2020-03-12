@@ -8,4 +8,11 @@
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Types\" />
+    <Folder Include="Messaging\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Messaging\MessageReceiver.cs" />
+  </ItemGroup>
 </Project>
