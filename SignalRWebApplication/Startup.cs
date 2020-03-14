@@ -23,7 +23,8 @@ namespace SignalRWebApplication
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime.
+        // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options =>
@@ -36,7 +37,8 @@ namespace SignalRWebApplication
             });
             services.AddControllers();
             services.AddSingleton<IRabbitMQChannelService, RabbitMQChannelService>();
-            services.AddSingleton<IRabbitMQService, RabbitMQService>(); // Need a single instance so we can keep the referenced connect with RabbitMQ open
+            // Need a single instance so we can keep the referenced connect with RabbitMQ open
+            services.AddSingleton<IRabbitMQService, RabbitMQService>();
             services.AddSignalR();
         }
 
@@ -49,13 +51,9 @@ namespace SignalRWebApplication
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseCors(MyAllowSpecificOrigins);
-            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

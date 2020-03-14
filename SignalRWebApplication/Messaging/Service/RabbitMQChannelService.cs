@@ -13,7 +13,7 @@ public class RabbitMQChannelService : IRabbitMQChannelService
 
     public RabbitMQChannelService()
     {
-        // Opens the connections to RabbitMQ
+        // Open connection to RabbitMQ and create a channel
         factory = new ConnectionFactory() { HostName = "localhost" };
         connection = factory.CreateConnection();
         channel = connection.CreateModel();

@@ -17,13 +17,6 @@ namespace SignalRWebApplication
 {
     public class Program
     {
-        //public static IHubContext<TableBookingHub> _hubContext;
-
-        //public Program(IHubContext<TableBookingHub> hubContext)
-        //{
-        //    _hubContext = hubContext;
-        //}
-
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
