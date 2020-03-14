@@ -15,11 +15,6 @@ public class RabbitMQService : IRabbitMQService
 
     public RabbitMQService(IServiceProvider serviceProvider)
     {
-        // Opens the connections to RabbitMQ
-        //_factory = new ConnectionFactory() { HostName = "localhost" };
-        //_connection = _factory.CreateConnection();
-        //_channel = _connection.CreateModel();
-
         _serviceProvider = serviceProvider;
         var channelService = (IRabbitMQChannelService)serviceProvider.GetService(typeof(IRabbitMQChannelService));
         _channel = channelService.getChannel();
