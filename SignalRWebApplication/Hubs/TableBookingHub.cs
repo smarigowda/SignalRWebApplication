@@ -12,19 +12,20 @@ namespace SignalRTableBooking.Hubs
 {
     public class TableBookingHub : Hub
     {
+        protected readonly IModel _channel;
 
         public TableBookingHub(IServiceProvider serviceProvider)
         {
             //_hubContext = hubContext;
 
-            //var channelService = (IRabbitMQChannelService)serviceProvider.GetService(typeof(IRabbitMQChannelService));
+            var channelService = (IRabbitMQChannelService)serviceProvider.GetService(typeof(IRabbitMQChannelService));
 
-            string exchangeName = "demoexchange";
-            string keyBindingName = "directexchange_key";
+            //string exchangeName = "demoexchange";
+            //string keyBindingName = "directexchange_key";
 
             //var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
             //var connection = factory.CreateConnection();
-            //var channel = connection.CreateModel();
+            _channel = channelService.getChannel();
 
             //const string queueName = "demoqueue";
             //string exchangeName = "demoexchange";
@@ -53,6 +54,8 @@ namespace SignalRTableBooking.Hubs
             MessageType messageObject;
 
             messageObject = JsonSerializer.Deserialize<MessageType>(message);
+            var channel = _channel;
+            channel = _channel;
 
             //var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
             //var factory = new ConnectionFactory();

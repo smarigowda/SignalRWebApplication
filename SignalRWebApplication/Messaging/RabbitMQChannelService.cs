@@ -7,23 +7,20 @@ using SignalRTableBooking.Hubs;
 
 public class RabbitMQChannelService : IRabbitMQChannelService
 {
-    protected readonly ConnectionFactory _factory;
-    protected readonly IConnection _connection;
-    protected readonly IModel _channel;
+    protected readonly ConnectionFactory factory;
+    protected readonly IConnection connection;
+    protected readonly IModel channel;
 
-    protected readonly IServiceProvider _serviceProvider;
-
-    public RabbitMQChannelService(IServiceProvider serviceProvider)
+    public RabbitMQChannelService()
     {
         // Opens the connections to RabbitMQ
-        _factory = new ConnectionFactory() { HostName = "localhost" };
-        _connection = _factory.CreateConnection();
-        _channel = _connection.CreateModel();
-        _serviceProvider = serviceProvider;
+        factory = new ConnectionFactory() { HostName = "localhost" };
+        connection = factory.CreateConnection();
+        channel = connection.CreateModel();
     }
 
-    public virtual IModel CreateChannel()
+    public virtual IModel getChannel()
     {
-        return _channel;
+        return channel;
     }
 }

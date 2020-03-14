@@ -2,5 +2,5 @@
 
 public interface IRabbitMQChannelService
 {
-    IModel CreateChannel();
+    IModel getChannel();
 }

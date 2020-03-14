@@ -22,7 +22,7 @@ public class RabbitMQService : IRabbitMQService
 
         _serviceProvider = serviceProvider;
         var channelService = (IRabbitMQChannelService)serviceProvider.GetService(typeof(IRabbitMQChannelService));
-        _channel = channelService.CreateChannel();
+        _channel = channelService.getChannel();
     }
 
     public virtual void Connect()
@@ -32,7 +32,8 @@ public class RabbitMQService : IRabbitMQService
         var consumer = new EventingBasicConsumer(_channel);
 
         // When we receive a message from SignalR
-        consumer.Received += delegate (object model, BasicDeliverEventArgs ea) {
+        consumer.Received += delegate (object model, BasicDeliverEventArgs ea)
+        {
             string message = Encoding.UTF8.GetString(ea.Body, 0, ea.Body.Length);
             // Get the TableBookingHub from SignalR (using DI)
             var chatHub = (IHubContext<TableBookingHub>)_serviceProvider.GetService(typeof(IHubContext<TableBookingHub>));
@@ -43,5 +44,4 @@ public class RabbitMQService : IRabbitMQService
         // Consume a RabbitMQ Queue
         _channel.BasicConsume(queue: "TestQueue", autoAck: true, consumer: consumer);
     }
-
 }

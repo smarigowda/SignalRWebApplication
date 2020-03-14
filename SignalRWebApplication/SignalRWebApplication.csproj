@@ -11,6 +11,7 @@
   <ItemGroup>
     <Folder Include="Types\" />
     <Folder Include="Messaging\" />
+    <Folder Include="Messaging\Contract\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Messaging\MessageReceiver.cs" />
