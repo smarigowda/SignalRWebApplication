@@ -36,6 +36,7 @@ namespace SignalRWebApplication
             });
             services.AddControllers();
             services.AddSingleton<IRabbitMQService, RabbitMQService>(); // Need a single instance so we can keep the referenced connect with RabbitMQ open
+            services.AddSingleton<IRabbitMQChannelService, RabbitMQChannelService>();
             services.AddSignalR();
         }
 

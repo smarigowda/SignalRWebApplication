@@ -13,24 +13,26 @@ namespace SignalRTableBooking.Hubs
     public class TableBookingHub : Hub
     {
 
-        public TableBookingHub()
+        public TableBookingHub(IServiceProvider serviceProvider)
         {
             //_hubContext = hubContext;
+
+            //var channelService = (IRabbitMQChannelService)serviceProvider.GetService(typeof(IRabbitMQChannelService));
 
             string exchangeName = "demoexchange";
             string keyBindingName = "directexchange_key";
 
-            var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
-            var connection = factory.CreateConnection();
-            var channel = connection.CreateModel();
+            //var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
+            //var connection = factory.CreateConnection();
+            //var channel = connection.CreateModel();
 
-            const string queueName = "demoqueue";
+            //const string queueName = "demoqueue";
             //string exchangeName = "demoexchange";
             //string keyBindingName = "directexchange_key";
 
-            channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
-            channel.QueueDeclare(queueName, true, false, false, null);
-            channel.QueueBind(queueName, exchangeName, keyBindingName);
+            //channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
+            //channel.QueueDeclare(queueName, true, false, false, null);
+            //channel.QueueBind(queueName, exchangeName, keyBindingName);
 
             // consumer
             //var consumer = new AsyncEventingBasicConsumer(channel);
@@ -52,9 +54,10 @@ namespace SignalRTableBooking.Hubs
 
             messageObject = JsonSerializer.Deserialize<MessageType>(message);
 
-            var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
-            var connection = factory.CreateConnection();
-            var channel = connection.CreateModel();
+            //var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
+            //var factory = new ConnectionFactory();
+            //var connection = factory.CreateConnection();
+            //var channel = connection.CreateModel();
 
             // Main entry point to the RabbitMQ .NET AMQP client
             //var connectionFactory = new RabbitMQ.Client.ConnectionFactory()
@@ -89,11 +92,11 @@ namespace SignalRTableBooking.Hubs
             // -------------------------------
             // Publish a message to RabbitMQ Q
             // TableBooking service should consume this messge
-            var properties = channel.CreateBasicProperties();
-            properties.Persistent = false;
-            byte[] messagebuffer = Encoding.Default.GetBytes(message);
-            channel.BasicPublish(exchangeName, keyBindingName, properties, messagebuffer);
-            Console.WriteLine("Message Sent");
+            //var properties = channel.CreateBasicProperties();
+            //properties.Persistent = false;
+            //byte[] messagebuffer = Encoding.Default.GetBytes(message);
+            //channel.BasicPublish(exchangeName, keyBindingName, properties, messagebuffer);
+            //Console.WriteLine("Message Sent");
 
             // Listen to the messages on CloadTest.UserInterfaceTaskManager queue
             // When there is a message, check the response method// accept only one unack-ed message at a time
@@ -104,9 +107,9 @@ namespace SignalRTableBooking.Hubs
             //Console.ReadLine();
 
             // And call the response method
-            string responseMethod = "BookTableResponse";
-            string responseMessage = "Booking request received.";
-            await Clients.All.SendAsync(responseMethod, responseMessage);
+            //string responseMethod = "BookTableResponse";
+            //string responseMessage = "Booking request received. We are processing your request. You will receive a message shortly. Thank you";
+            //await Clients.All.SendAsync(responseMethod, responseMessage);
             //await Clients.Caller.SendAsync(responseMethod, responseMessage);
         }
 
