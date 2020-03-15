@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using SignalRTableBooking.Hubs;
@@ -11,18 +12,22 @@ public class RabbitMQService : IRabbitMQService
     protected readonly IConnection _connection;
     protected readonly IModel channel;
     protected readonly IServiceProvider _serviceProvider;
+    protected readonly string TableBooking;
 
-    public RabbitMQService(IServiceProvider serviceProvider)
+    public RabbitMQService(IServiceProvider serviceProvider, IConfiguration configuration)
     {
         _serviceProvider = serviceProvider;
         var channelService = (IRabbitMQChannelService)serviceProvider.GetService(typeof(IRabbitMQChannelService));
         channel = channelService.getChannel();
+
+        string qname = configuration.GetValue<string>("RabbitMQNames:TableBooking");
+        TableBooking = qname;
     }
 
     public virtual void Connect()
     {
         // Declare a RabbitMQ Queue
-        channel.QueueDeclare(queue: "TestQueue", durable: true, exclusive: false, autoDelete: false);
+        channel.QueueDeclare(queue: TableBooking, durable: true, exclusive: false, autoDelete: false);
         var consumer = new EventingBasicConsumer(channel);
 
         // When we receive a message from SignalR
@@ -37,6 +42,6 @@ public class RabbitMQService : IRabbitMQService
 
         // Consume a RabbitMQ Queue.
         // You should be able to see a consumer in RabbitMQ admin console.
-        channel.BasicConsume(queue: "TestQueue", autoAck: true, consumer: consumer);
+        channel.BasicConsume(queue: TableBooking, autoAck: true, consumer: consumer);
     }
 }
