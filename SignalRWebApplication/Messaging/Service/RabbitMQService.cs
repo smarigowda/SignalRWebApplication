@@ -12,7 +12,7 @@ public class RabbitMQService : IRabbitMQService
     protected readonly IConnection _connection;
     protected readonly IModel channel;
     protected readonly IServiceProvider _serviceProvider;
-    protected readonly string TableBooking;
+    protected string queueName;
 
     public RabbitMQService(IServiceProvider serviceProvider, IConfiguration configuration)
     {
@@ -20,28 +20,32 @@ public class RabbitMQService : IRabbitMQService
         var channelService = (IRabbitMQChannelService)serviceProvider.GetService(typeof(IRabbitMQChannelService));
         channel = channelService.getChannel();
 
-        string qname = configuration.GetValue<string>("RabbitMQNames:TableBooking");
-        TableBooking = qname;
+        queueName = configuration.GetValue<string>("RabbitMQNames:SignalRWeb");
     }
 
     public virtual void Connect()
     {
-        // Declare a RabbitMQ Queue
-        channel.QueueDeclare(queue: TableBooking, durable: true, exclusive: false, autoDelete: false);
-        var consumer = new EventingBasicConsumer(channel);
 
-        // When we receive a message from SignalR
+        string exchangeName = "demoexchange";
+        string keyBindingName = "directexchange_key";
+
+        channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
+        channel.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false);
+        channel.QueueBind(queueName, exchangeName, keyBindingName);
+        var consumer = new EventingBasicConsumer(channel);
+        receiveMessageFromSignalR(consumer);
+    }
+
+    public void receiveMessageFromSignalR(EventingBasicConsumer consumer)
+    {
         consumer.Received += delegate (object model, BasicDeliverEventArgs ea)
         {
             string message = Encoding.UTF8.GetString(ea.Body, 0, ea.Body.Length);
-            // Get TableBookingHub from SignalR (using DI)
+            // using DI
             var chatHub = (IHubContext<TableBookingHub>)_serviceProvider.GetService(typeof(IHubContext<TableBookingHub>));
-            // Send message to all users in SignalR
             chatHub.Clients.All.SendAsync("BookTableResponse", message);
         };
-
-        // Consume a RabbitMQ Queue.
         // You should be able to see a consumer in RabbitMQ admin console.
-        channel.BasicConsume(queue: TableBooking, autoAck: true, consumer: consumer);
+        channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
     }
 }
