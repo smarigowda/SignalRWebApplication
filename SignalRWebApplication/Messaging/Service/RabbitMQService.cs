@@ -25,7 +25,6 @@ public class RabbitMQService : IRabbitMQService
 
     public virtual void Connect()
     {
-
         string exchangeName = "demoexchange";
         string keyBindingName = "directexchange_key";
 
