@@ -39,6 +39,7 @@ namespace SignalRTableBooking.Hubs
             string year = messageObject.year;
             string startTime = messageObject.startTime;
             string endTime = messageObject.endTime;
+            string connectionId = messageObject.connectionId;
 
             // store the request in MongoDB
             // code here...
@@ -54,7 +55,8 @@ namespace SignalRTableBooking.Hubs
                 {"month", month},
                 {"year", year},
                 {"startTime", startTime},
-                {"endTime", endTime}
+                {"endTime", endTime},
+                {"connectionId", connectionId}
             };
             table.InsertOne(doc);
 

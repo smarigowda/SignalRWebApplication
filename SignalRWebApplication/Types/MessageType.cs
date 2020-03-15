@@ -12,5 +12,6 @@ namespace SignalRWebApplication.Types
         public string year { get; set; }
         public string startTime { get; set; }
         public string endTime { get; set; }
+        public string connectionId { get; set; }
     }
 }
